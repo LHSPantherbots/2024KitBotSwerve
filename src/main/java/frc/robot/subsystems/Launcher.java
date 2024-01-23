@@ -120,7 +120,7 @@ public class Launcher extends SubsystemBase {
 
     public void launcherRpmUp() {
         lastSetpoint = setPoint;
-        setPoint = lastSetpoint + 50;
+        setPoint = lastSetpoint + 250;
         // closedLoopLaunch();
 
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
@@ -128,7 +128,7 @@ public class Launcher extends SubsystemBase {
 
     public void launcherRpmDown() {
         lastSetpoint = setPoint;
-        setPoint = lastSetpoint - 50;
+        setPoint = lastSetpoint - 250;
         // closedLoopLaunch();
 
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
@@ -149,6 +149,18 @@ public class Launcher extends SubsystemBase {
         // closedLoopLaunch();
 
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public void newIntake() {
+        lastSetpoint = setPoint;
+        setPoint = -150;
+        m_Feeder.set(-0.25);
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public void newResume() {
+        m_Feeder.set(0.0);
+        launcherResume();
     }
 
     public void setLauncher(double speed) {

@@ -85,35 +85,6 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, GamePadButtons.Start)
         .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
-
-    new JoystickButton(m_driverController, GamePadButtons.B)
-        .whileTrue(new RunCommand(launcher::intake, launcher))
-        .onFalse(new InstantCommand(launcher::StopAll, launcher));
-
-    new JoystickButton(m_driverController, GamePadButtons.Y)
-        // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
-        // launcher));
-        .whileTrue(new RunCommand(() -> launcher.setLauncher(1.0), launcher))
-        .onFalse(new InstantCommand(() -> launcher.setLauncher(0.0), launcher));
-
-    new JoystickButton(m_driverController, GamePadButtons.X)
-        .whileTrue(new InstantCommand(launcher::StopAll, launcher));
-
-    new JoystickButton(m_driverController, GamePadButtons.A)
-        .whileTrue(new RunCommand(launcher::feed, launcher))
-        .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
-
-    new POVButton(m_driverController, GamePadButtons.Up)
-        .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
-
-    new POVButton(m_driverController, GamePadButtons.Down)
-        .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
-
-    new POVButton(m_driverController, GamePadButtons.Left)
-        .onTrue(new InstantCommand(launcher::launcherStop, launcher));
-
-    new POVButton(m_driverController, GamePadButtons.Right)
-        .onTrue(new InstantCommand(launcher::launcherResume, launcher));
     // While the left bumper is held down, the robot's speed will be set to a tenth
     // of its standard
     // value,
@@ -143,6 +114,38 @@ public class RobotContainer {
     // .whileTrue(new RunCommand(leds::orangePulse, leds));
 
     // Operator Controls
+
+    // new JoystickButton(operatorController, GamePadButtons.B)
+    //     .whileTrue(new RunCommand(launcher::intake, launcher))
+    //     .onFalse(new InstantCommand(launcher::StopAll, launcher));
+    new JoystickButton(operatorController, GamePadButtons.B)
+        .onTrue(new InstantCommand(launcher::newIntake, launcher))
+        .onFalse(new InstantCommand(launcher::newResume, launcher));
+
+    // new JoystickButton(operatorController, GamePadButtons.Y)
+    //     // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
+    //     // launcher));
+    //     .whileTrue(new RunCommand(() -> launcher.setLauncher(1.0), launcher))
+    //     .onFalse(new InstantCommand(() -> launcher.setLauncher(0.0), launcher));
+
+    new JoystickButton(operatorController, GamePadButtons.X)
+        .whileTrue(new InstantCommand(launcher::StopAll, launcher));
+
+    new JoystickButton(operatorController, GamePadButtons.A)
+        .whileTrue(new RunCommand(launcher::feed, launcher))
+        .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
+
+    new POVButton(operatorController, GamePadButtons.Up)
+        .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
+
+    new POVButton(operatorController, GamePadButtons.Down)
+        .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
+
+    new POVButton(operatorController, GamePadButtons.Left)
+        .onTrue(new InstantCommand(launcher::launcherStop, launcher));
+
+    new POVButton(operatorController, GamePadButtons.Right)
+        .onTrue(new InstantCommand(launcher::launcherResume, launcher));
 
   }
 
