@@ -11,7 +11,8 @@ public class RobotStateSubsystem extends SubsystemBase {
   /** Creates a new RobotStateSubsystem. */
   private boolean coneMode = true; // defaults to cone mode
 
-  public RobotStateSubsystem() {}
+  public RobotStateSubsystem() {
+  }
 
   @Override
   public void periodic() {

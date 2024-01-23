@@ -61,10 +61,10 @@ public class SwerveModule {
   /**
    * Constructs a SwerveModule.
    *
-   * @param driveMotorChannel ID for the driv e motor.
+   * @param driveMotorChannel   ID for the driv e motor.
    * @param turningMotorChannel ID for the turning motor.
-   * @param turningEncoderPort ID for the turning encoder port
-   * @param angleZero Absolute angle when module is point forward
+   * @param turningEncoderPort  ID for the turning encoder port
+   * @param angleZero           Absolute angle when module is point forward
    */
   public SwerveModule(
       int driveMotorChannel,

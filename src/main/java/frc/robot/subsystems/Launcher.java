@@ -42,18 +42,16 @@ public class Launcher extends SubsystemBase {
 
         pidController = m_Launcher.getPIDController();
 
-        
-
-         // PID coefficients these will need to be tuned
-        kP = 0.00015;//0.00025; //5e-5; 
-        kI =  0;//1e-6;
-        kD = 0.0008;//0.0004; 
+        // PID coefficients these will need to be tuned
+        kP = 0.00015;// 0.00025; //5e-5;
+        kI = 0;// 1e-6;
+        kD = 0.0008;// 0.0004;
         kIz = 0;
-        kFF = 0.00017;//0.00019;
-        kMaxOutput = 1; 
+        kFF = 0.00017;// 0.00019;
+        kMaxOutput = 1;
         kMinOutput = -1;
         maxRPM = 5700;
-        allowableError = 100; // 50    //Lets the system known when the velocity is close enough to launch
+        allowableError = 100; // 50 //Lets the system known when the velocity is close enough to launch
 
         // set PID coefficients
         pidController.setP(kP);
@@ -66,29 +64,28 @@ public class Launcher extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //Smart Dashboard Items
+        // Smart Dashboard Items
         SmartDashboard.putNumber("Launcher Velocity", getLauncherVelocity());
         SmartDashboard.putBoolean("At Set Velocity", isAtVelocity());
         SmartDashboard.putNumber("Launcher Setpoint", getVelocitySetpoint());
     }
 
-    public double getVelocitySetpoint(){
+    public double getVelocitySetpoint() {
         return setPoint;
     }
 
-    public double getLauncherVelocity(){
+    public double getLauncherVelocity() {
         return launcherEncoder.getVelocity();
     }
 
-    public boolean isAtVelocity(){
+    public boolean isAtVelocity() {
         double error = getLauncherVelocity() - setPoint;
         return (Math.abs(error) < allowableError);
     }
 
-    public void setVelocitySetPoint(double vel){
+    public void setVelocitySetPoint(double vel) {
         setPoint = vel;
     }
-
 
     public void StopAll() {
         m_Feeder.set(0);
@@ -104,36 +101,36 @@ public class Launcher extends SubsystemBase {
 
     }
 
-    public void closedLoopLaunch(){
+    public void closedLoopLaunch() {
         pidController.setP(kP);
         pidController.setI(kI);
         pidController.setD(kD);
         pidController.setIZone(kI);
         pidController.setFF(kFF);
-        pidController.setOutputRange(kMinOutput, kMaxOutput); 
-        
+        pidController.setOutputRange(kMinOutput, kMaxOutput);
+
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void speakerCloseShot(){
+    public void speakerCloseShot() {
         lastSetpoint = setPoint;
         setPoint = 2000;
         closedLoopLaunch();
     }
 
-    public void launcherRpmUp(){
+    public void launcherRpmUp() {
         lastSetpoint = setPoint;
         setPoint = lastSetpoint + 50;
         // closedLoopLaunch();
-        
+
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
-    public void launcherRpmDown(){
+    public void launcherRpmDown() {
         lastSetpoint = setPoint;
         setPoint = lastSetpoint - 50;
         // closedLoopLaunch();
-        
+
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
@@ -141,7 +138,7 @@ public class Launcher extends SubsystemBase {
         lastSetpoint = setPoint;
         setPoint = 0;
         // closedLoopLaunch();
-        
+
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
@@ -150,7 +147,7 @@ public class Launcher extends SubsystemBase {
         lastSetpoint = setPoint;
         setPoint = tmp;
         // closedLoopLaunch();
-        
+
         pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
@@ -162,11 +159,9 @@ public class Launcher extends SubsystemBase {
         m_Feeder.set(speed);
     }
 
-    
-
     public void feed() {
         // if (isAtVelocity()) {
-        //     m_Feeder.set(0.15);
+        // m_Feeder.set(0.15);
         // }
         m_Feeder.set(0.9);
 
