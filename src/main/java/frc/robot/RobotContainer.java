@@ -222,16 +222,16 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
     
     new POVButton(m_driverController, GamePadButtons.Up)
-        .onTrue(new RunCommand(launcher::launcherRpmUp, launcher));
+        .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
 
     new POVButton(m_driverController, GamePadButtons.Down)
-        .onTrue(new RunCommand(launcher::launcherRpmDown, launcher));
+        .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
     
     new POVButton(m_driverController, GamePadButtons.Left)
-        .onTrue(new RunCommand(launcher::launcherStop, launcher));
+        .onTrue(new InstantCommand(launcher::launcherStop, launcher));
     
     new POVButton(m_driverController, GamePadButtons.Right)
-        .onTrue(new RunCommand(launcher::launcherResume, launcher));
+        .onTrue(new InstantCommand(launcher::launcherResume, launcher));
     // While the left bumper is held down, the robot's speed will be set to a tenth of its standard
     // value,
     // and the leds will pulse orange to indicate reduced speed

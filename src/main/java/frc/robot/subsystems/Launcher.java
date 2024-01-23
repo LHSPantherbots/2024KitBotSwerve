@@ -124,26 +124,34 @@ public class Launcher extends SubsystemBase {
     public void launcherRpmUp(){
         lastSetpoint = setPoint;
         setPoint = lastSetpoint + 50;
-        closedLoopLaunch();
+        // closedLoopLaunch();
+        
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherRpmDown(){
         lastSetpoint = setPoint;
         setPoint = lastSetpoint - 50;
-        closedLoopLaunch();
+        // closedLoopLaunch();
+        
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherStop() {
         lastSetpoint = setPoint;
         setPoint = 0;
-        closedLoopLaunch();
+        // closedLoopLaunch();
+        
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherResume() {
         var tmp = lastSetpoint;
         lastSetpoint = setPoint;
         setPoint = tmp;
-        closedLoopLaunch();
+        // closedLoopLaunch();
+        
+        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void setLauncher(double speed) {
