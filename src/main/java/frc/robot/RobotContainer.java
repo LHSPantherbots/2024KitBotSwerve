@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -220,16 +221,16 @@ public class RobotContainer {
         .whileTrue(new RunCommand(launcher::feed, launcher))
         .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
     
-    new JoystickButton(m_driverController, GamePadButtons.Up)
+    new POVButton(m_driverController, GamePadButtons.Up)
         .onTrue(new RunCommand(launcher::launcherRpmUp, launcher));
 
-    new JoystickButton(m_driverController, GamePadButtons.Down)
+    new POVButton(m_driverController, GamePadButtons.Down)
         .onTrue(new RunCommand(launcher::launcherRpmDown, launcher));
     
-    new JoystickButton(m_driverController, GamePadButtons.Left)
+    new POVButton(m_driverController, GamePadButtons.Left)
         .onTrue(new RunCommand(launcher::launcherStop, launcher));
     
-    new JoystickButton(m_driverController, GamePadButtons.Right)
+    new POVButton(m_driverController, GamePadButtons.Right)
         .onTrue(new RunCommand(launcher::launcherResume, launcher));
     // While the left bumper is held down, the robot's speed will be set to a tenth of its standard
     // value,
