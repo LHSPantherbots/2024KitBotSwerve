@@ -4,11 +4,11 @@
 
 package frc.robot.subsystems;
 
-// import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -17,15 +17,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class DriveSubsystem extends SubsystemBase {
-  // limelight vision may need to be tuned
-  // limelight vision may need to be tuned
-  // private double kP = 0.120;
-  // private double kF = 0.0; // 0.2;
 
   private Pigeon2 m_gyro = new Pigeon2(DriveConstants.kPigeonCAN_ID);
 
@@ -61,6 +58,8 @@ public class DriveSubsystem extends SubsystemBase {
           DriveConstants.kRearRightTurningMotorPort,
           DriveConstants.kRearRightTurningEncoderPort,
           DriveConstants.kRearRightAngleZero);
+  
+  private final LimeLight m_limeLight = new LimeLight();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
@@ -78,6 +77,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   // private final Gyro m_gyro = new ADXRS450_Gyro();
+
+  private final SwerveDrivePoseEstimator m_poseEstimator;
+  private final Field2d m_field = new Field2d();
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -101,28 +103,45 @@ public class DriveSubsystem extends SubsystemBase {
               }
             })
         .start();
+    m_poseEstimator = new SwerveDrivePoseEstimator(
+      DriveConstants.kDriveKinematics,
+      m_gyro.getRotation2d(), 
+      // null,
+      new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_rearLeft.getPosition(),
+          m_rearRight.getPosition()
+      },
+      new Pose2d()
+    );
+    SmartDashboard.putData("Field", m_field);
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(
-        getYaw(),
+    // m_odometry.update(
+    //     getYaw(),
+    //     new SwerveModulePosition[] {
+    //       m_frontLeft.getPosition(),
+    //       m_frontRight.getPosition(),
+    //       m_rearLeft.getPosition(),
+    //       m_rearRight.getPosition()
+    //     });
+    m_poseEstimator.update(
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
         new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
         });
-    // Update the odometry in the periodic block
-    m_odometry.update(
-        getYaw(),
-        new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
-        });
+    if (m_limeLight.isTargetValid()) {
+      m_poseEstimator.addVisionMeasurement(m_limeLight.getBotPose3d().toPose2d(), m_limeLight.getTargetLatency());
+    }
+
+    m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
     // Shuffleboard.getTab("Drivetrian")
     // .add("Test", 0)
@@ -200,7 +219,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    // return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   /**
@@ -209,7 +229,16 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
+    // m_odometry.resetPosition(
+    //     getYaw(),
+    //     new SwerveModulePosition[] {
+    //       m_frontLeft.getPosition(),
+    //       m_frontRight.getPosition(),
+    //       m_rearLeft.getPosition(),
+    //       m_rearRight.getPosition()
+    //     },
+    //     pose);
+    m_poseEstimator.resetPosition(
         getYaw(),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -221,7 +250,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometryReverse(Pose2d pose) {
-    m_odometry.resetPosition(
+    // m_odometry.resetPosition(
+    //     new Rotation2d(Math.PI),
+    //     new SwerveModulePosition[] {
+    //       m_frontLeft.getPosition(),
+    //       m_frontRight.getPosition(),
+    //       m_rearLeft.getPosition(),
+    //       m_rearRight.getPosition()
+    //     },
+    //     pose);
+    m_poseEstimator.resetPosition(
         new Rotation2d(Math.PI),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
