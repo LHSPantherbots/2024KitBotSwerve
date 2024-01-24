@@ -81,7 +81,19 @@ public class DriveSubsystem extends SubsystemBase {
           }
         })
         .start();
-    m_poseEstimator = new SwerveDrivePoseEstimator(
+    if (m_limeLight.hasLockedVisionTarget()) {
+      m_poseEstimator = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics,
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_rearLeft.getPosition(),
+            m_rearRight.getPosition()
+        },
+        m_limeLight.getBotPose3d().toPose2d());
+    } else {
+      m_poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
@@ -91,6 +103,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         new Pose2d());
+    }
+    
     SmartDashboard.putData("Field", m_field);
   }
 

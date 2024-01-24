@@ -16,6 +16,7 @@ public class LimeLight extends SubsystemBase {
     private double verticalOffset;
     private double targetArea;
     private Pose3d botPose3d;
+    private boolean visonLockAck = false;
 
     public LimeLight() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -31,6 +32,10 @@ public class LimeLight extends SubsystemBase {
         SmartDashboard.putBoolean("LL Valid Target", validTargets);
         SmartDashboard.putNumber("Vision Loc X", botPose3d.getX());
         SmartDashboard.putNumber("Target Latancy", getTargetLatency());
+        if (isTargetValid()) {
+            botPose3d = getBotPose3d();
+            visonLockAck = true;
+        }
 
     }
 
@@ -54,10 +59,19 @@ public class LimeLight extends SubsystemBase {
         return table.getEntry("tl").getDouble(0);
     }
 
+    public Pose3d getLastPose3d() {
+        return botPose3d;
+    }
+
+    public boolean hasLockedVisionTarget() {
+        return visonLockAck;
+    }
+
     public Pose3d getBotPose3d() {
         var poseArrary = table.getEntry("botpose").getDoubleArray(new double[6]);
-        botPose3d = new Pose3d(poseArrary[0], poseArrary[1], poseArrary[2],
-                new Rotation3d(poseArrary[3], poseArrary[4], poseArrary[5]));
-        return botPose3d;
+        // botPose3d = new Pose3d(poseArrary[0], poseArrary[1], poseArrary[2],
+        //         new Rotation3d(poseArrary[3], poseArrary[4], poseArrary[5]));
+        // return botPose3d;
+        return new Pose3d(poseArrary[0], poseArrary[1], poseArrary[2],new Rotation3d(poseArrary[3], poseArrary[4], poseArrary[5]));
     }
 }

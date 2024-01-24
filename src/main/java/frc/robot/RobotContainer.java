@@ -115,12 +115,12 @@ public class RobotContainer {
 
     // Operator Controls
 
-    // new JoystickButton(operatorController, GamePadButtons.B)
-    //     .whileTrue(new RunCommand(launcher::intake, launcher))
-    //     .onFalse(new InstantCommand(launcher::StopAll, launcher));
     new JoystickButton(operatorController, GamePadButtons.B)
-        .onTrue(new InstantCommand(launcher::newIntake, launcher))
-        .onFalse(new InstantCommand(launcher::newResume, launcher));
+        .whileTrue(new RunCommand(launcher::intake, launcher))
+        .onFalse(new InstantCommand(launcher::StopAll, launcher));
+    // new JoystickButton(operatorController, GamePadButtons.B)
+    //     .onTrue(new InstantCommand(launcher::newIntake, launcher))
+    //     .onFalse(new InstantCommand(launcher::newResume, launcher));
 
     // new JoystickButton(operatorController, GamePadButtons.Y)
     //     // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
@@ -141,11 +141,11 @@ public class RobotContainer {
     new POVButton(operatorController, GamePadButtons.Down)
         .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
 
-    new POVButton(operatorController, GamePadButtons.Left)
-        .onTrue(new InstantCommand(launcher::launcherStop, launcher));
+    // new POVButton(operatorController, GamePadButtons.Left)
+    //     .onTrue(new InstantCommand(launcher::launcherStop, launcher));
 
-    new POVButton(operatorController, GamePadButtons.Right)
-        .onTrue(new InstantCommand(launcher::launcherResume, launcher));
+    // new POVButton(operatorController, GamePadButtons.Right)
+    //     .onTrue(new InstantCommand(launcher::launcherResume, launcher));
 
   }
 

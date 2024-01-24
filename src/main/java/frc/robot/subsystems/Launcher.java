@@ -14,15 +14,16 @@ public class Launcher extends SubsystemBase {
     private final CANSparkMax m_Launcher;
     RelativeEncoder launcherEncoder;
     private final CANSparkMax m_Feeder;
-    private double lastSetpoint = 0;
-    private double setPoint = 0;
+    // private double lastSetpoint = 0;
+    //private double setPoint = 0;
+    private double launcherspeed = 0;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
     private SparkPIDController pidController;
 
     public Launcher() {
-        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushless);
-        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushless);
+        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushed);
+        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushed);
 
         m_Launcher.restoreFactoryDefaults();
         m_Feeder.restoreFactoryDefaults();
@@ -38,7 +39,7 @@ public class Launcher extends SubsystemBase {
 
         m_Launcher.setClosedLoopRampRate(0.25);
 
-        launcherEncoder = m_Launcher.getEncoder();
+        //launcherEncoder = m_Launcher.getEncoder();
 
         pidController = m_Launcher.getPIDController();
 
@@ -65,97 +66,100 @@ public class Launcher extends SubsystemBase {
     @Override
     public void periodic() {
         // Smart Dashboard Items
-        SmartDashboard.putNumber("Launcher Velocity", getLauncherVelocity());
-        SmartDashboard.putBoolean("At Set Velocity", isAtVelocity());
-        SmartDashboard.putNumber("Launcher Setpoint", getVelocitySetpoint());
+        // SmartDashboard.putNumber("Launcher Velocity", getLauncherVelocity());
+        // SmartDashboard.putBoolean("At Set Velocity", isAtVelocity());
+        // SmartDashboard.putNumber("Launcher Setpoint", getVelocitySetpoint());
     }
 
-    public double getVelocitySetpoint() {
-        return setPoint;
-    }
+    // public double getVelocitySetpoint() {
+    //     return setPoint;
+    // }
 
-    public double getLauncherVelocity() {
-        return launcherEncoder.getVelocity();
-    }
+    // public double getLauncherVelocity() {
+    //     return launcherEncoder.getVelocity();
+    // }
 
-    public boolean isAtVelocity() {
-        double error = getLauncherVelocity() - setPoint;
-        return (Math.abs(error) < allowableError);
-    }
+    // public boolean isAtVelocity() {
+    //     double error = getLauncherVelocity() - setPoint;
+    //     return (Math.abs(error) < allowableError);
+    // }
 
-    public void setVelocitySetPoint(double vel) {
-        setPoint = vel;
-    }
+    // public void setVelocitySetPoint(double vel) {
+    //     setPoint = vel;
+    // }
 
     public void StopAll() {
+        launcherspeed = 0;
         m_Feeder.set(0);
-        // m_Launcher.set(0);
-        lastSetpoint = setPoint;
-        setPoint = 0;
-        closedLoopLaunch();
+        m_Launcher.set(0);
+        // lastSetpoint = setPoint;
+        // setPoint = 0;
+        //closedLoopLaunch();
     }
 
     public void intake() {
-        m_Feeder.set(-0.25);
-        m_Launcher.set(-0.5);
+        m_Feeder.set(0.25);
+        m_Launcher.set(0.5);
 
     }
 
-    public void closedLoopLaunch() {
-        pidController.setP(kP);
-        pidController.setI(kI);
-        pidController.setD(kD);
-        pidController.setIZone(kI);
-        pidController.setFF(kFF);
-        pidController.setOutputRange(kMinOutput, kMaxOutput);
+    // public void closedLoopLaunch() {
+    //     pidController.setP(kP);
+    //     pidController.setI(kI);
+    //     pidController.setD(kD);
+    //     pidController.setIZone(kI);
+    //     pidController.setFF(kFF);
+    //     pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    }
+    //     pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    // }
 
     public void speakerCloseShot() {
-        lastSetpoint = setPoint;
-        setPoint = 2000;
-        closedLoopLaunch();
+        // lastSetpoint = setPoint;
+        // setPoint = 2000;
+        //closedLoopLaunch();
     }
 
     public void launcherRpmUp() {
-        lastSetpoint = setPoint;
-        setPoint = lastSetpoint + 250;
+        launcherspeed = launcherspeed-0.25;
+        m_Launcher.set(launcherspeed);
         // closedLoopLaunch();
 
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherRpmDown() {
-        lastSetpoint = setPoint;
-        setPoint = lastSetpoint - 250;
+        launcherspeed = launcherspeed+0.25;
+        m_Launcher.set(launcherspeed);
+        // lastSetpoint = setPoint;
+        // setPoint = lastSetpoint - 250;
         // closedLoopLaunch();
 
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherStop() {
-        lastSetpoint = setPoint;
-        setPoint = 0;
+        // lastSetpoint = setPoint;
+        // setPoint = 0;
         // closedLoopLaunch();
 
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherResume() {
-        var tmp = lastSetpoint;
-        lastSetpoint = setPoint;
-        setPoint = tmp;
+        // var tmp = lastSetpoint;
+        // lastSetpoint = setPoint;
+        // setPoint = tmp;
         // closedLoopLaunch();
 
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void newIntake() {
-        lastSetpoint = setPoint;
-        setPoint = -150;
-        m_Feeder.set(-0.25);
-        pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        // lastSetpoint = setPoint;
+        // setPoint = -150;
+        // m_Feeder.set(-0.25);
+        // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void newResume() {
@@ -175,7 +179,7 @@ public class Launcher extends SubsystemBase {
         // if (isAtVelocity()) {
         // m_Feeder.set(0.15);
         // }
-        m_Feeder.set(0.9);
+        m_Feeder.set(-0.9);
 
     }
 }
