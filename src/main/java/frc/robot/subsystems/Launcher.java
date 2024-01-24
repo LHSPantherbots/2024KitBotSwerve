@@ -15,8 +15,9 @@ public class Launcher extends SubsystemBase {
     RelativeEncoder launcherEncoder;
     private final CANSparkMax m_Feeder;
     // private double lastSetpoint = 0;
-    //private double setPoint = 0;
+    // private double setPoint = 0;
     private double launcherspeed = 0;
+    private double lastLauncherSpeed = 0;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
     private SparkPIDController pidController;
@@ -39,7 +40,7 @@ public class Launcher extends SubsystemBase {
 
         m_Launcher.setClosedLoopRampRate(0.25);
 
-        //launcherEncoder = m_Launcher.getEncoder();
+        // launcherEncoder = m_Launcher.getEncoder();
 
         pidController = m_Launcher.getPIDController();
 
@@ -72,70 +73,74 @@ public class Launcher extends SubsystemBase {
     }
 
     // public double getVelocitySetpoint() {
-    //     return setPoint;
+    // return setPoint;
     // }
 
     // public double getLauncherVelocity() {
-    //     return launcherEncoder.getVelocity();
+    // return launcherEncoder.getVelocity();
     // }
 
     // public boolean isAtVelocity() {
-    //     double error = getLauncherVelocity() - setPoint;
-    //     return (Math.abs(error) < allowableError);
+    // double error = getLauncherVelocity() - setPoint;
+    // return (Math.abs(error) < allowableError);
     // }
 
     // public void setVelocitySetPoint(double vel) {
-    //     setPoint = vel;
+    // setPoint = vel;
     // }
 
     public void StopAll() {
+        lastLauncherSpeed = launcherspeed;
         launcherspeed = 0;
         m_Feeder.set(0);
         m_Launcher.set(0);
         // lastSetpoint = setPoint;
         // setPoint = 0;
-        //closedLoopLaunch();
+        // closedLoopLaunch();
     }
 
     public void intake() {
+        lastLauncherSpeed = launcherspeed;
         m_Feeder.set(0.25);
         m_Launcher.set(0.5);
 
     }
 
     // public void closedLoopLaunch() {
-    //     pidController.setP(kP);
-    //     pidController.setI(kI);
-    //     pidController.setD(kD);
-    //     pidController.setIZone(kI);
-    //     pidController.setFF(kFF);
-    //     pidController.setOutputRange(kMinOutput, kMaxOutput);
+    // pidController.setP(kP);
+    // pidController.setI(kI);
+    // pidController.setD(kD);
+    // pidController.setIZone(kI);
+    // pidController.setFF(kFF);
+    // pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-    //     pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+    // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     // }
 
     public void speakerCloseShot() {
         // lastSetpoint = setPoint;
         // setPoint = 2000;
-        //closedLoopLaunch();
+        // closedLoopLaunch();
     }
 
     public void launcherRpmUp() {
-        launcherspeed = launcherspeed-0.25;
+        lastLauncherSpeed = launcherspeed;
+        launcherspeed = launcherspeed - 0.25;
         m_Launcher.set(launcherspeed);
         // closedLoopLaunch();
 
-        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherRpmDown() {
-        launcherspeed = launcherspeed+0.25;
+        lastLauncherSpeed = launcherspeed;
+        launcherspeed = launcherspeed + 0.25;
         m_Launcher.set(launcherspeed);
         // lastSetpoint = setPoint;
         // setPoint = lastSetpoint - 250;
         // closedLoopLaunch();
 
-        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherStop() {
@@ -143,16 +148,20 @@ public class Launcher extends SubsystemBase {
         // setPoint = 0;
         // closedLoopLaunch();
 
-        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherResume() {
+        var tmp = lastLauncherSpeed;
+        lastLauncherSpeed = launcherspeed;
+        launcherspeed = tmp;
+        m_Launcher.set(launcherspeed);
         // var tmp = lastSetpoint;
         // lastSetpoint = setPoint;
         // setPoint = tmp;
         // closedLoopLaunch();
 
-        //pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+        // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void newIntake() {

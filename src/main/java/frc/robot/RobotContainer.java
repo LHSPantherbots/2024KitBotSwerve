@@ -31,130 +31,130 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  public static final RobotStateSubsystem robotState = new RobotStateSubsystem();
-  // public static final LimeLight limelight = new LimeLight();
-  public static final DriveSubsystem driveTrain = new DriveSubsystem();
-  public static final Launcher launcher = new Launcher();
+    // The robot's subsystems and commands are defined here...
+    public static final RobotStateSubsystem robotState = new RobotStateSubsystem();
+    // public static final LimeLight limelight = new LimeLight();
+    public static final DriveSubsystem driveTrain = new DriveSubsystem();
+    public static final Launcher launcher = new Launcher();
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-  public static SendableChooser<Command> autoChoice = new SendableChooser<>();
+    public static SendableChooser<Command> autoChoice = new SendableChooser<>();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
 
-    Shuffleboard.getTab("Autonomous").add(autoChoice);
-    autoChoice.addOption("Do Nothing", new RunCommand(() -> driveTrain.drive(0, 0, 0, true)));
+        Shuffleboard.getTab("Autonomous").add(autoChoice);
+        autoChoice.addOption("Do Nothing", new RunCommand(() -> driveTrain.drive(0, 0, 0, true)));
 
-    // Configure the button bindings
-    configureButtonBindings();
+        // Configure the button bindings
+        configureButtonBindings();
 
-    // Set the default drive command to split-stick arcade drive
-    driveTrain.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        new RunCommand(
-            () -> driveTrain.drive(
-                -m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond,
-                -m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond,
-                // -m_driverController.getRightX()
-                -(m_driverController.getRightTriggerAxis()
-                    - m_driverController.getLeftTriggerAxis())
-                    * DriveConstants.kMaxSpeedMetersPerSecond,
-                true),
-            driveTrain));
+        // Set the default drive command to split-stick arcade drive
+        driveTrain.setDefaultCommand(
+                // A split-stick arcade command, with forward/backward controlled by the left
+                // hand, and turning controlled by the right.
+                new RunCommand(
+                        () -> driveTrain.drive(
+                                -m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond,
+                                -m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond,
+                                // -m_driverController.getRightX()
+                                -(m_driverController.getRightTriggerAxis()
+                                        - m_driverController.getLeftTriggerAxis())
+                                        * DriveConstants.kMaxSpeedMetersPerSecond,
+                                true),
+                        driveTrain));
 
-  }
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
-   * it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
 
-    // DRIVER CONTROLS
+        // DRIVER CONTROLS
 
-    new JoystickButton(m_driverController, GamePadButtons.Start)
-        .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
-    // While the left bumper is held down, the robot's speed will be set to a tenth
-    // of its standard
-    // value,
-    // and the leds will pulse orange to indicate reduced speed
-    // double reducedspeedconstant = 0.2; // how much the speed is reduced by
-    // new JoystickButton(m_driverController, GamePadButtons.LB)
-    // .whileTrue(
-    // new RunCommand(
-    // () ->
-    // driveTrain.drive(
-    // -m_driverController.getLeftY()
-    // * reducedspeedconstant
-    // * DriveConstants.kMaxSpeedMetersPerSecond,
-    // -m_driverController.getLeftX()
-    // * reducedspeedconstant
-    // * DriveConstants.kMaxSpeedMetersPerSecond,
-    // // -m_driverController.getRightX()
-    // -(m_driverController.getRightTriggerAxis()
-    // - m_driverController.getLeftTriggerAxis())
-    // * reducedspeedconstant
-    // * 2.0
-    // * DriveConstants
-    // .kMaxSpeedMetersPerSecond, // Doubled the rotation because it was
-    // // not turning at reduced speed
-    // true),
-    // driveTrain))
-    // .whileTrue(new RunCommand(leds::orangePulse, leds));
+        new JoystickButton(m_driverController, GamePadButtons.Start)
+                .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
+        // While the left bumper is held down, the robot's speed will be set to a tenth
+        // of its standard
+        // value,
+        // and the leds will pulse orange to indicate reduced speed
+        // double reducedspeedconstant = 0.2; // how much the speed is reduced by
+        // new JoystickButton(m_driverController, GamePadButtons.LB)
+        // .whileTrue(
+        // new RunCommand(
+        // () ->
+        // driveTrain.drive(
+        // -m_driverController.getLeftY()
+        // * reducedspeedconstant
+        // * DriveConstants.kMaxSpeedMetersPerSecond,
+        // -m_driverController.getLeftX()
+        // * reducedspeedconstant
+        // * DriveConstants.kMaxSpeedMetersPerSecond,
+        // // -m_driverController.getRightX()
+        // -(m_driverController.getRightTriggerAxis()
+        // - m_driverController.getLeftTriggerAxis())
+        // * reducedspeedconstant
+        // * 2.0
+        // * DriveConstants
+        // .kMaxSpeedMetersPerSecond, // Doubled the rotation because it was
+        // // not turning at reduced speed
+        // true),
+        // driveTrain))
+        // .whileTrue(new RunCommand(leds::orangePulse, leds));
 
-    // Operator Controls
+        // Operator Controls
 
-    new JoystickButton(operatorController, GamePadButtons.B)
-        .whileTrue(new RunCommand(launcher::intake, launcher))
-        .onFalse(new InstantCommand(launcher::StopAll, launcher));
-    // new JoystickButton(operatorController, GamePadButtons.B)
-    //     .onTrue(new InstantCommand(launcher::newIntake, launcher))
-    //     .onFalse(new InstantCommand(launcher::newResume, launcher));
+        new JoystickButton(operatorController, GamePadButtons.B)
+                .whileTrue(new RunCommand(launcher::intake, launcher))
+                .onFalse(new InstantCommand(launcher::newResume, launcher));
+        // new JoystickButton(operatorController, GamePadButtons.B)
+        // .onTrue(new InstantCommand(launcher::newIntake, launcher))
+        // .onFalse(new InstantCommand(launcher::newResume, launcher));
 
-    // new JoystickButton(operatorController, GamePadButtons.Y)
-    //     // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
-    //     // launcher));
-    //     .whileTrue(new RunCommand(() -> launcher.setLauncher(1.0), launcher))
-    //     .onFalse(new InstantCommand(() -> launcher.setLauncher(0.0), launcher));
+        // new JoystickButton(operatorController, GamePadButtons.Y)
+        // // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
+        // // launcher));
+        // .whileTrue(new RunCommand(() -> launcher.setLauncher(1.0), launcher))
+        // .onFalse(new InstantCommand(() -> launcher.setLauncher(0.0), launcher));
 
-    new JoystickButton(operatorController, GamePadButtons.X)
-        .whileTrue(new InstantCommand(launcher::StopAll, launcher));
+        new JoystickButton(operatorController, GamePadButtons.X)
+                .whileTrue(new InstantCommand(launcher::StopAll, launcher));
 
-    new JoystickButton(operatorController, GamePadButtons.A)
-        .whileTrue(new RunCommand(launcher::feed, launcher))
-        .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
+        new JoystickButton(operatorController, GamePadButtons.A)
+                .whileTrue(new RunCommand(launcher::feed, launcher))
+                .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
 
-    new POVButton(operatorController, GamePadButtons.Up)
-        .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
+        new POVButton(operatorController, GamePadButtons.Up)
+                .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
 
-    new POVButton(operatorController, GamePadButtons.Down)
-        .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
+        new POVButton(operatorController, GamePadButtons.Down)
+                .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
 
-    // new POVButton(operatorController, GamePadButtons.Left)
-    //     .onTrue(new InstantCommand(launcher::launcherStop, launcher));
+        // new POVButton(operatorController, GamePadButtons.Left)
+        // .onTrue(new InstantCommand(launcher::launcherStop, launcher));
 
-    // new POVButton(operatorController, GamePadButtons.Right)
-    //     .onTrue(new InstantCommand(launcher::launcherResume, launcher));
+        // new POVButton(operatorController, GamePadButtons.Right)
+        // .onTrue(new InstantCommand(launcher::launcherResume, launcher));
 
-  }
+    }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChoice.getSelected();
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return autoChoice.getSelected();
+    }
 }
