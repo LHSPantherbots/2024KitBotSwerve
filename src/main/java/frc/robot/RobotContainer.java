@@ -85,6 +85,8 @@ public class RobotContainer {
 
         new JoystickButton(m_driverController, GamePadButtons.Start)
                 .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
+        new JoystickButton(m_driverController, GamePadButtons.Select)
+                .whileTrue(new InstantCommand(driveTrain::restOdomWithCamData));
         // While the left bumper is held down, the robot's speed will be set to a tenth
         // of its standard
         // value,

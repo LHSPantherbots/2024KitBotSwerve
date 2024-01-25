@@ -302,4 +302,17 @@ public class DriveSubsystem extends SubsystemBase {
   public double getHeadingRadians() {
     return getYaw().getRadians();
   }
+
+  public void restOdomWithCamData() {
+    m_poseEstimator.resetPosition(
+      new Rotation2d(getHeadingRadians()),
+      new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+      },
+      m_limeLight.getLastPose3d().toPose2d()
+    );
+  }
 }
