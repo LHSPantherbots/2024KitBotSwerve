@@ -68,10 +68,11 @@ public class LimeLight extends SubsystemBase {
     }
 
     public Pose3d getBotPose3d() {
-        var poseArrary = table.getEntry("botpose").getDoubleArray(new double[6]);
+        var poseArrary = table.getEntry("botpose").getDoubleArray(new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
         // botPose3d = new Pose3d(poseArrary[0], poseArrary[1], poseArrary[2],
         //         new Rotation3d(poseArrary[3], poseArrary[4], poseArrary[5]));
         // return botPose3d;
+        System.out.println(poseArrary[0]);
         return new Pose3d(poseArrary[0], poseArrary[1], poseArrary[2],new Rotation3d(poseArrary[3], poseArrary[4], poseArrary[5]));
     }
 }

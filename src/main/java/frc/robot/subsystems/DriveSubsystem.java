@@ -151,6 +151,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", getHeading());
     SmartDashboard.putString("Pose", getPose().toString());
+    SmartDashboard.putString("Vison Pose", m_limeLight.getBotPose3d().toString());
     SmartDashboard.putString("Rot 2d", getYaw().toString());
 
     SmartDashboard.putNumber("Pitch", getPitch());
