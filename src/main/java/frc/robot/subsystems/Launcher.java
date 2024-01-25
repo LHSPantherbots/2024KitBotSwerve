@@ -23,10 +23,10 @@ public class Launcher extends SubsystemBase {
     private SparkPIDController pidController;
 
     public Launcher() {
-        // m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushed);
-        // m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushed);
-        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushless);
-        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushless);
+        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushed);
+        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushed);
+        // m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushless);
+        // m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushless);
 
         m_Launcher.restoreFactoryDefaults();
         m_Feeder.restoreFactoryDefaults();
