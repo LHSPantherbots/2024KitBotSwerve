@@ -35,7 +35,7 @@ public class LimeLightNoteDect extends SubsystemBase {
 
     public Translation2d getTargetTranslation() {
         var x = (-cameraHeight)/Math.tan(Math.toRadians(cameraAngle+verticalOffset));
-        var y = x*Math.cos(Math.toRadians(verticalOffset));
+        var y = x*Math.cos(Math.toRadians(horizontalOffset));
         return new Translation2d(x, y);
     }
 
