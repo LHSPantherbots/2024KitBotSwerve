@@ -7,6 +7,10 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GamePadButtons;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ShootCmd;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -41,12 +45,17 @@ public class RobotContainer {
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
-    public static SendableChooser<Command> autoChoice = new SendableChooser<>();
+   // public static SendableChooser<Command> autoChoice = new SendableChooser<>();
+   private final SendableChooser<Command> autoChoice;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+
+        NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher));
+
+        autoChoice = AutoBuilder.buildAutoChooser();
 
         Shuffleboard.getTab("Autonomous").add(autoChoice);
         autoChoice.addOption("Do Nothing", new RunCommand(() -> driveTrain.drive(0, 0, 0, true)));

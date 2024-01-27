@@ -7,6 +7,10 @@ package frc.robot.subsystems;
 import frc.robot.Constants.DriveConstants;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +19,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -106,12 +111,39 @@ public class DriveSubsystem extends SubsystemBase {
     }
     
     SmartDashboard.putData("Field", m_field);
+
+    AutoBuilder.configureHolonomic(
+      this::getPose,
+      this::resetOdometry,
+      this::getChassisSpeed, 
+      this::driveRobotRelative, 
+      new HolonomicPathFollowerConfig(
+        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(5.0, 0.0, 0.0),
+        4.5,
+        0.4,
+        new ReplanningConfig()
+      ), 
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      }, 
+      this
+    );
   }
 
   @Override
   public void periodic() {
     m_poseEstimator.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        // Rotation2d.fromDegrees(m_gyro.getAngle()),
+        m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -159,6 +191,15 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roll", getRoll());
 
     SmartDashboard.putNumber("Roll Rate", getRollRate());
+  }
+
+  public ChassisSpeeds getChassisSpeed() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(new SwerveModuleState[] {
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    });
   }
 
   /**
@@ -223,6 +264,11 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putString("FR2 Set State", swerveModuleStates[1].toString());
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void driveRobotRelative(ChassisSpeeds cs) {
+    drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, false);
+    // drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false);
   }
 
   /**
