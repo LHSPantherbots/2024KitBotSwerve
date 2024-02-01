@@ -16,7 +16,7 @@ public class Launcher extends SubsystemBase {
     private final CANSparkMax m_Feeder;
     // private double lastSetpoint = 0;
     // private double setPoint = 0;
-    private double launcherspeed = 0;
+    private double launcherSpeed = 0;
     private double lastLauncherSpeed = 0;
 
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, allowableError;
@@ -92,8 +92,8 @@ public class Launcher extends SubsystemBase {
     // }
 
     public void StopAll() {
-        lastLauncherSpeed = launcherspeed;
-        launcherspeed = 0;
+        lastLauncherSpeed = launcherSpeed;
+        launcherSpeed = 0;
         m_Feeder.set(0);
         m_Launcher.set(0);
         // lastSetpoint = setPoint;
@@ -102,7 +102,7 @@ public class Launcher extends SubsystemBase {
     }
 
     public void intake() {
-        lastLauncherSpeed = launcherspeed;
+        lastLauncherSpeed = launcherSpeed;
         m_Feeder.set(0.25);
         m_Launcher.set(0.5);
 
@@ -116,6 +116,7 @@ public class Launcher extends SubsystemBase {
     // pidController.setFF(kFF);
     // pidController.setOutputRange(kMinOutput, kMaxOutput);
 
+
     // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     // }
 
@@ -126,18 +127,18 @@ public class Launcher extends SubsystemBase {
     }
 
     public void launcherRpmUp() {
-        lastLauncherSpeed = launcherspeed;
-        launcherspeed = launcherspeed - 0.25;
-        m_Launcher.set(launcherspeed);
+        lastLauncherSpeed = launcherSpeed;
+        launcherSpeed = launcherSpeed - 0.25; //date: yesterday subtracting because motors are on backwards, thanks PattyToo!
+        m_Launcher.set(launcherSpeed);
         // closedLoopLaunch();
 
         // pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
     }
 
     public void launcherRpmDown() {
-        lastLauncherSpeed = launcherspeed;
-        launcherspeed = launcherspeed + 0.25;
-        m_Launcher.set(launcherspeed);
+        lastLauncherSpeed = launcherSpeed;
+        launcherSpeed = launcherSpeed + 0.25;
+        m_Launcher.set(launcherSpeed);
         // lastSetpoint = setPoint;
         // setPoint = lastSetpoint - 250;
         // closedLoopLaunch();
@@ -155,9 +156,9 @@ public class Launcher extends SubsystemBase {
 
     public void launcherResume() {
         var tmp = lastLauncherSpeed;
-        lastLauncherSpeed = launcherspeed;
-        launcherspeed = tmp;
-        m_Launcher.set(launcherspeed);
+        lastLauncherSpeed = launcherSpeed;
+        launcherSpeed = tmp;
+        m_Launcher.set(launcherSpeed);
         // var tmp = lastSetpoint;
         // lastSetpoint = setPoint;
         // setPoint = tmp;
@@ -190,7 +191,7 @@ public class Launcher extends SubsystemBase {
         // if (isAtVelocity()) {
         // m_Feeder.set(0.15);
         // }
-        m_Feeder.set(-0.9);
+        m_Feeder.set(-1);
 
     }
 }
