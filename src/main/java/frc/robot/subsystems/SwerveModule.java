@@ -77,7 +77,13 @@ public class SwerveModule {
 
     m_driveMotor.restoreFactoryDefaults();
     m_turningMotor.restoreFactoryDefaults();
-    m_turningMotor.setInverted(true);
+    for (int i=0;i<=5;i++){
+      m_turningMotor.setInverted(true);
+      if (m_turningMotor.getInverted()==true) {
+        break;
+      }
+    }
+    
 
     // initialze PID controller and encoder objects
     m_drivePidController = m_driveMotor.getPIDController();
@@ -104,11 +110,37 @@ public class SwerveModule {
     maxAcc = 3000;
 
     // set PID coefficients
-    m_drivePidController.setP(kP);
-    m_drivePidController.setI(kI);
-    m_drivePidController.setD(kD);
-    m_drivePidController.setIZone(kIz);
-    m_drivePidController.setFF(kFF);
+    for (int i =0;i<=5;i++){
+      m_drivePidController.setP(kP);
+      if (m_drivePidController.getP()==kP) {
+        break;
+      }
+    }
+    for (int i =0;i<=5;i++){
+      m_drivePidController.setI(kI);
+      if (m_drivePidController.getI()==kI) {
+        break;
+      }
+    }
+    for (int i =0;i<=5;i++){
+      m_drivePidController.setD(kD);
+      if (m_drivePidController.getD()==kD) {
+        break;
+      }
+    }
+    for (int i =0;i<=5;i++){
+      m_drivePidController.setIZone(kIz);
+      if (m_drivePidController.getIZone()==kIz) {
+        break;
+      }
+    }
+    for (int i=0;i<=5;i++){
+      m_drivePidController.setFF(kFF);
+      if (m_drivePidController.getFF()==kFF){
+        break;
+      }
+    }
+    
     m_drivePidController.setOutputRange(kMinOutput, kMaxOutput);
 
     int smartMotionSlot = 0;
