@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.RobotStateSubsystem;
+import frc.robot.subsystems.LimeLightNoteDect;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,6 +41,7 @@ public class RobotContainer {
     // public static final LimeLight limelight = new LimeLight();
     public static final DriveSubsystem driveTrain = new DriveSubsystem();
     public static final Launcher launcher = new Launcher();
+    public static final LimeLightNoteDect limelight = new LimeLightNoteDect();
 
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
