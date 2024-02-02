@@ -10,18 +10,16 @@ public class SparkWrapper extends CANSparkMax {
 
     @Override
     public void setInverted(boolean isInverted) {
-        // TODO Auto-generated method stub
         super.setInverted(isInverted);
-        for (int i=0;i<=5;i++){
-            if (super.getInverted()==isInverted){
+        for (int i = 0; i <= 5; i++) {
+            if (super.getInverted() == isInverted) {
                 break;
             }
         }
     }
 
-    public SparkPIDWrapper getPIDWrapper(){
+    public SparkPIDWrapper getPIDWrapper() {
         return new SparkPIDWrapper(super.getPIDController());
     }
-
 
 }

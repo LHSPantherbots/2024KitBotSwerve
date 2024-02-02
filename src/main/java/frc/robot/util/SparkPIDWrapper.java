@@ -1,105 +1,105 @@
 package frc.robot.util;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.SparkPIDController;
 
 public class SparkPIDWrapper {
     private SparkPIDController sparkPID;
+
     SparkPIDWrapper(SparkPIDController sparkPID) {
-        this.sparkPID=sparkPID;
+        this.sparkPID = sparkPID;
     }
 
     public SparkPIDController getSparkPIDController() {
         return this.sparkPID;
     }
 
-    public void setP(double gain){
-        
-        for (int i=0;i<=5;i++){
+    public void setP(double gain) {
+
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setP(gain);
-            if (this.sparkPID.getP()==gain){
+            if (this.sparkPID.getP() == gain) {
                 break;
             }
         }
     }
 
-    public void setI(double gain){
-        for (int i=0;i<=5;i++){
-        this.sparkPID.setI(gain);
-            if (this.sparkPID.getI()==gain){
+    public void setI(double gain) {
+        for (int i = 0; i <= 5; i++) {
+            this.sparkPID.setI(gain);
+            if (this.sparkPID.getI() == gain) {
                 break;
             }
         }
     }
 
-    public void setD(double gain){
-        for (int i=0;i<=5;i++){
-        this.sparkPID.setD(gain);
-            if (this.sparkPID.getD()==gain){
+    public void setD(double gain) {
+        for (int i = 0; i <= 5; i++) {
+            this.sparkPID.setD(gain);
+            if (this.sparkPID.getD() == gain) {
                 break;
             }
         }
 
     }
 
-    public void setIZone(double IZone){
-        for (int i=0;i<=5;i++){
-        this.sparkPID.setIZone(IZone);
-            if (this.sparkPID.getIZone()==IZone){
+    public void setIZone(double IZone) {
+        for (int i = 0; i <= 5; i++) {
+            this.sparkPID.setIZone(IZone);
+            if (this.sparkPID.getIZone() == IZone) {
                 break;
             }
         }
     }
 
-    public void setFF(double gain){
-        for (int i=0;i<=5;i++){
-        this.sparkPID.setFF(gain);
-            if (this.sparkPID.getFF()==gain){
+    public void setFF(double gain) {
+        for (int i = 0; i <= 5; i++) {
+            this.sparkPID.setFF(gain);
+            if (this.sparkPID.getFF() == gain) {
                 break;
             }
         }
     }
 
-    public void setOutputRange(double min, double max){
-        for (int i=0;i<=5;i++){
+    public void setOutputRange(double min, double max) {
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setOutputRange(min, max);
-            if (this.sparkPID.getOutputMin()==min && this.sparkPID.getOutputMax()==max){
+            if (this.sparkPID.getOutputMin() == min && this.sparkPID.getOutputMax() == max) {
                 break;
             }
         }
     }
 
-    public void setSmartMotionMaxVelocity(double maxVal, int slotID){
-        for (int i=0;i<=5;i++){
+    public void setSmartMotionMaxVelocity(double maxVal, int slotID) {
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setSmartMotionMaxVelocity(maxVal, slotID);
-            if (this.sparkPID.getSmartMotionMaxVelocity(slotID)==maxVal){
+            if (this.sparkPID.getSmartMotionMaxVelocity(slotID) == maxVal) {
                 break;
             }
         }
     }
 
-    public void setSmartMotionMinOutputVelocity(double minVel, int slotID){
-        for (int i=0;i<=5;i++){
+    public void setSmartMotionMinOutputVelocity(double minVel, int slotID) {
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setSmartMotionMinOutputVelocity(minVel, slotID);
-            if (this.sparkPID.getSmartMotionMinOutputVelocity(slotID)==minVel){
+            if (this.sparkPID.getSmartMotionMinOutputVelocity(slotID) == minVel) {
                 break;
             }
         }
     }
 
-    public void setSmartMotionMaxAccel(double maxAccel, int slotID){
-        for (int i=0;i<=5;i++){
+    public void setSmartMotionMaxAccel(double maxAccel, int slotID) {
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setSmartMotionMaxAccel(maxAccel, slotID);
-            if (this.sparkPID.getSmartMotionMaxAccel(slotID)==maxAccel){
+            if (this.sparkPID.getSmartMotionMaxAccel(slotID) == maxAccel) {
                 break;
             }
         }
     }
 
-    public void setSmartMotionAllowedClosedLoopError(double allowedErr, int slotID){
-        for (int i=0;i<=5;i++){
+    public void setSmartMotionAllowedClosedLoopError(double allowedErr, int slotID) {
+        for (int i = 0; i <= 5; i++) {
             this.sparkPID.setSmartMotionAllowedClosedLoopError(allowedErr, slotID);
-            if (this.sparkPID.getSmartMotionAllowedClosedLoopError(slotID)==allowedErr){
+            if (this.sparkPID.getSmartMotionAllowedClosedLoopError(slotID) == allowedErr) {
                 break;
             }
         }
