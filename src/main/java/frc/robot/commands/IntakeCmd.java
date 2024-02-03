@@ -1,18 +1,17 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Launcher;
 
-public class ShootCmd extends SequentialCommandGroup {
+public class IntakeCmd extends SequentialCommandGroup {
 
-    public ShootCmd(Launcher launcher) {
+    public IntakeCmd(Launcher launcher) {
         addCommands(
-            new InstantCommand(() -> { launcher.setLauncher(-1.0);}),
-            new WaitCommand(0.5),
-            new InstantCommand(() -> { launcher.feed();}),
-            new WaitCommand(0.25),
+            new InstantCommand(() -> { launcher.intake();}),
+            new WaitCommand(1),
             new InstantCommand(() -> { launcher.StopAll();})
         );
     }

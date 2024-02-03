@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GamePadButtons;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShootCmd;
+import frc.robot.commands.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.RobotStateSubsystem;
+import frc.robot.subsystems.LimeLightNoteDect;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,6 +41,7 @@ public class RobotContainer {
     // public static final LimeLight limelight = new LimeLight();
     public static final DriveSubsystem driveTrain = new DriveSubsystem();
     public static final Launcher launcher = new Launcher();
+    public static final LimeLightNoteDect limelight = new LimeLightNoteDect();
 
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -54,6 +56,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher));
+        NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(launcher));
 
         autoChoice = AutoBuilder.buildAutoChooser();
 

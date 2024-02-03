@@ -12,20 +12,25 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.util.SparkPIDWrapper;
+import frc.robot.util.SparkWrapper;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 
 public class SwerveModule {
-  private final CANSparkMax m_driveMotor;
-  private final CANSparkMax m_turningMotor;
+  // private final CANSparkMax m_driveMotor;
+  private final SparkWrapper m_driveMotor;
+  // private final CANSparkMax m_turningMotor;
+  private final SparkWrapper m_turningMotor;
   private final RelativeEncoder m_driveEncoder;
   public boolean openLoopDrive = false;
   // private final RelativeEncoder turn_Encoder;
   private final AnalogEncoder turn_Encoder;
   // private SparkPIDController m_drivePidController, m_turnPidController;
   private SparkPIDController m_drivePidController;
+  private SparkPIDWrapper m_drivePidWrapper;
   private final Double offsetAngle;
 
   public double kP,
@@ -72,15 +77,19 @@ public class SwerveModule {
       int turningEncoderPort,
       double angleZero) { // , // This is the absolute angle of the module pointing forward 0deg
 
-    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
-    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    // m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_driveMotor = new SparkWrapper(driveMotorChannel, MotorType.kBrushless);
+    // m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_turningMotor = new SparkWrapper(turningMotorChannel, MotorType.kBrushless);
 
     m_driveMotor.restoreFactoryDefaults();
     m_turningMotor.restoreFactoryDefaults();
     m_turningMotor.setInverted(true);
+    
 
     // initialze PID controller and encoder objects
-    m_drivePidController = m_driveMotor.getPIDController();
+    // m_drivePidController = m_driveMotor.getPIDController();
+    m_drivePidWrapper = m_driveMotor.getPIDWrapper();
     this.m_driveEncoder = m_driveMotor.getEncoder();
     this.turn_Encoder = new AnalogEncoder(turningEncoderPort);
 
@@ -104,18 +113,20 @@ public class SwerveModule {
     maxAcc = 3000;
 
     // set PID coefficients
-    m_drivePidController.setP(kP);
-    m_drivePidController.setI(kI);
-    m_drivePidController.setD(kD);
-    m_drivePidController.setIZone(kIz);
-    m_drivePidController.setFF(kFF);
-    m_drivePidController.setOutputRange(kMinOutput, kMaxOutput);
+    m_drivePidWrapper.setP(kP);
+    m_drivePidWrapper.setI(kI);
+    m_drivePidWrapper.setD(kD);
+    m_drivePidWrapper.setIZone(kIz);
+    m_drivePidWrapper.setFF(kFF);
+    
+    m_drivePidWrapper.setOutputRange(kMinOutput, kMaxOutput);
 
     int smartMotionSlot = 0;
-    m_drivePidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-    m_drivePidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-    m_drivePidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-    m_drivePidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    m_drivePidWrapper.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+    m_drivePidWrapper.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+    m_drivePidWrapper.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+    m_drivePidWrapper.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    m_drivePidController = m_drivePidWrapper.getSparkPIDController();
 
     kP_turn = 0.0008; // 5e-5;
     kI_turn = 0.0; // 1e-6;
