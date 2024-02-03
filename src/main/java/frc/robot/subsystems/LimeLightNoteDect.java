@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,7 +12,7 @@ public class LimeLightNoteDect extends SubsystemBase {
     private boolean validTargets = false;
     private double horizontalOffset;
     private double verticalOffset;
-    private double targetArea;
+    // private double targetArea;
     private double cameraHeight = 0.508;
     private double cameraAngle = 0.0;
 
@@ -26,10 +25,9 @@ public class LimeLightNoteDect extends SubsystemBase {
         validTargets = isTargetValid();
         horizontalOffset = getHorizontalOffset();
         verticalOffset = getVerticalOffset();
-        targetArea = getTargetArea();
+        // targetArea = getTargetArea();
         SmartDashboard.putBoolean("Wilson Valid Target", validTargets);
         if (validTargets) {
-            // SmartDashboard.putData("Target Translation", (Sendable) getTargetTranslation());
             SmartDashboard.putString("Target Translation", getTargetTranslation().toString());
         }
     }

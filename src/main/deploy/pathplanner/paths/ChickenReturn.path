@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.204955319001547,
+        "y": 7.42568176045443
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.086921330251652,
+        "y": 7.42568176045443
+      },
+      "isLocked": false,
+      "linkedName": "ChickenPoint"
+    },
+    {
+      "anchor": {
+        "x": 3.3633361812178166,
+        "y": 7.024545685455007
+      },
+      "prevControl": {
+        "x": 4.1447162061649845,
+        "y": 7.222642029807811
+      },
+      "nextControl": {
+        "x": 2.7009952201722585,
+        "y": 6.856628258711063
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.338998314360265,
+        "y": 5.597247558131481
+      },
+      "prevControl": {
+        "x": 1.9360380538942894,
+        "y": 6.25025977324682
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -179.44686078575305,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
