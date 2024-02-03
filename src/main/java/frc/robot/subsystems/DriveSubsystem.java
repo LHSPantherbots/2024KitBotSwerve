@@ -151,7 +151,11 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     if (m_limeLight.isTargetValid()) {
-      m_poseEstimator.addVisionMeasurement(m_limeLight.getBotPose3d().toPose2d(), Timer.getFPGATimestamp() - (m_limeLight.getTargetLatency()/1000.0) - (m_limeLight.getCaptureLatency()/1000.0));
+      var tmpPose = m_limeLight.getBotPose3d().toPose2d();
+      if (Math.abs(m_poseEstimator.getEstimatedPosition().getTranslation().getDistance(tmpPose.getTranslation()))<0.75){
+        m_poseEstimator.addVisionMeasurement(m_limeLight.getBotPose3d().toPose2d(), Timer.getFPGATimestamp() - (m_limeLight.getTargetLatency()/1000.0) - (m_limeLight.getCaptureLatency()/1000.0));
+      }
+      
     }
 
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
