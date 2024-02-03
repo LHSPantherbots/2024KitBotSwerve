@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GamePadButtons;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.ShootCmd;
+import frc.robot.commands.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -54,6 +54,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher));
+        NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(launcher));
 
         autoChoice = AutoBuilder.buildAutoChooser();
 
