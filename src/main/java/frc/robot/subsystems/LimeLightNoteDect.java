@@ -14,7 +14,7 @@ public class LimeLightNoteDect extends SubsystemBase {
     private double horizontalOffset;
     private double verticalOffset;
     private double targetArea;
-    private double cameraHeight = 0.4;
+    private double cameraHeight = 0.508;
     private double cameraAngle = 0.0;
 
     public LimeLightNoteDect() {
@@ -29,13 +29,14 @@ public class LimeLightNoteDect extends SubsystemBase {
         targetArea = getTargetArea();
         SmartDashboard.putBoolean("Wilson Valid Target", validTargets);
         if (validTargets) {
-            SmartDashboard.putData("Target Translation", (Sendable) getTargetTranslation());
+            // SmartDashboard.putData("Target Translation", (Sendable) getTargetTranslation());
+            SmartDashboard.putString("Target Translation", getTargetTranslation().toString());
         }
     }
 
     public Translation2d getTargetTranslation() {
         var x = (-cameraHeight)/Math.tan(Math.toRadians(cameraAngle+verticalOffset));
-        var y = x*Math.cos(Math.toRadians(horizontalOffset));
+        var y = x*Math.sin(Math.toRadians(horizontalOffset));
         return new Translation2d(x, y);
     }
 
