@@ -33,6 +33,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double lastTimestamp = Timer.getFPGATimestamp();
   private double lastAngle = 0.0;
 
+  private boolean botRelative = true;
+
   // Robot swerve modules
   private final SwerveModule m_frontLeft = new SwerveModule(
       DriveConstants.kFrontLeftDriveMotorPort,
@@ -202,6 +204,11 @@ public class DriveSubsystem extends SubsystemBase {
     });
   }
 
+    public void setRelitive(){
+      //this method changes the robots relavtive orientation from bot or field 
+      botRelative = !botRelative;
+    }
+
   /**
    * Returns the currently-estimated pose of the robot.
    *
@@ -266,9 +273,24 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void driveRel(double xSpeed, double ySpeed, double rot) {
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+        botRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getYaw())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    SmartDashboard.putString("FR2 Set State", swerveModuleStates[1].toString());
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
   public void driveRobotRelative(ChassisSpeeds cs) {
-    drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, false);
-    // drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false);
+    // drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, botRelative);
+    drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false);
   }
 
   /**
