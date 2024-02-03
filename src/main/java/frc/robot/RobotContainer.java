@@ -71,14 +71,14 @@ public class RobotContainer {
                 // A split-stick arcade command, with forward/backward controlled by the left
                 // hand, and turning controlled by the right.
                 new RunCommand(
-                        () -> driveTrain.drive(
+                        () -> driveTrain.driveRel(
                                 -m_driverController.getLeftY() * DriveConstants.kMaxSpeedMetersPerSecond,
                                 -m_driverController.getLeftX() * DriveConstants.kMaxSpeedMetersPerSecond,
                                 // -m_driverController.getRightX()
                                 -(m_driverController.getRightTriggerAxis()
                                         - m_driverController.getLeftTriggerAxis())
-                                        * DriveConstants.kMaxSpeedMetersPerSecond,
-                                true),
+                                        * DriveConstants.kMaxSpeedMetersPerSecond
+                                ),
                         driveTrain));
 
     }
@@ -136,11 +136,8 @@ public class RobotContainer {
         // .onTrue(new InstantCommand(launcher::newIntake, launcher))
         // .onFalse(new InstantCommand(launcher::newResume, launcher));
 
-        // new JoystickButton(operatorController, GamePadButtons.Y)
-        // // .whileTrue(new InstantCommand(() -> launcher.setVelocitySetPoint(250),
-        // // launcher));
-        // .whileTrue(new RunCommand(() -> launcher.setLauncher(1.0), launcher))
-        // .onFalse(new InstantCommand(() -> launcher.setLauncher(0.0), launcher));
+        new JoystickButton(m_driverController, GamePadButtons.LB)
+                .whileTrue(new InstantCommand(driveTrain::setRelitive, driveTrain));     
 
         new JoystickButton(operatorController, GamePadButtons.X)
                 .whileTrue(new InstantCommand(launcher::StopAll, launcher));

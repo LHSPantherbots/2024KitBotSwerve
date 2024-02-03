@@ -10,7 +10,7 @@ public class ShootCmd extends SequentialCommandGroup {
     public ShootCmd(Launcher launcher) {
         addCommands(
             new InstantCommand(() -> { launcher.setLauncher(-1.0);}),
-            new WaitCommand(0.25),
+            new WaitCommand(0.5),
             new InstantCommand(() -> { launcher.feed();}),
             new WaitCommand(0.25),
             new InstantCommand(() -> { launcher.StopAll();})
