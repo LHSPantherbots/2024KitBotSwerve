@@ -11,8 +11,10 @@ import frc.robot.Constants.RIO_Channels_CAN_MOTOR;
 
 public class Launcher extends SubsystemBase {
     private final CANSparkMax m_Launcher;
+    private final CANSparkMax launcherFollower;
     RelativeEncoder launcherEncoder;
     private final CANSparkMax m_Feeder;
+    private final CANSparkMax feederFollower;
     // private double lastSetpoint = 0;
     // private double setPoint = 0;
     private double launcherSpeed = 0;
@@ -22,24 +24,38 @@ public class Launcher extends SubsystemBase {
     private SparkPIDController pidController;
 
     public Launcher() {
-        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushed);
-        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushed);
-        // m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushless);
-        // m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushless);
+        //m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushed);
+        //m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushed);
+        m_Launcher = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherMotor, MotorType.kBrushless);
+        launcherFollower = new CANSparkMax(RIO_Channels_CAN_MOTOR.LauncherFollower,MotorType.kBrushless);
+
+        m_Feeder = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederMotor, MotorType.kBrushless);
+        feederFollower = new CANSparkMax(RIO_Channels_CAN_MOTOR.FeederFollower,MotorType.kBrushless);
+
 
         m_Launcher.restoreFactoryDefaults();
+        launcherFollower.restoreFactoryDefaults();
         m_Feeder.restoreFactoryDefaults();
+        feederFollower.restoreFactoryDefaults();
+
 
         m_Launcher.setInverted(false);
         m_Feeder.setInverted(false);
 
         m_Launcher.setIdleMode(IdleMode.kCoast);
+        launcherFollower.setIdleMode(IdleMode.kCoast);
         m_Feeder.setIdleMode(IdleMode.kBrake);
+        feederFollower.setIdleMode(IdleMode.kBrake);
 
         m_Launcher.setSmartCurrentLimit(60);
+        launcherFollower.setSmartCurrentLimit(60);
         m_Feeder.setSmartCurrentLimit(50);
+        feederFollower.setSmartCurrentLimit(50);
 
         m_Launcher.setClosedLoopRampRate(0.25);
+
+        launcherFollower.follow(m_Launcher,true);
+        feederFollower.follow(m_Feeder, true);
 
         // launcherEncoder = m_Launcher.getEncoder();
 
@@ -102,8 +118,8 @@ public class Launcher extends SubsystemBase {
 
     public void intake() {
         lastLauncherSpeed = launcherSpeed;
-        m_Feeder.set(0.25);
-        m_Launcher.set(0.5);
+        m_Feeder.set(-0.25);
+        m_Launcher.set(-0.5);
 
     }
 
@@ -127,7 +143,7 @@ public class Launcher extends SubsystemBase {
 
     public void launcherRpmUp() {
         lastLauncherSpeed = launcherSpeed;
-        launcherSpeed = launcherSpeed - 0.25; //date: yesterday subtracting because motors are on backwards, thanks PattyToo!
+        launcherSpeed = launcherSpeed + 0.25; //date: yesterday subtracting because motors are on backwards, thanks PattyToo!
         m_Launcher.set(launcherSpeed);
         // closedLoopLaunch();
 
@@ -136,7 +152,7 @@ public class Launcher extends SubsystemBase {
 
     public void launcherRpmDown() {
         lastLauncherSpeed = launcherSpeed;
-        launcherSpeed = launcherSpeed + 0.25;
+        launcherSpeed = launcherSpeed - 0.25;
         m_Launcher.set(launcherSpeed);
         // lastSetpoint = setPoint;
         // setPoint = lastSetpoint - 250;
@@ -190,7 +206,7 @@ public class Launcher extends SubsystemBase {
         // if (isAtVelocity()) {
         // m_Feeder.set(0.15);
         // }
-        m_Feeder.set(-1);
+        m_Feeder.set(1);
 
     }
 }

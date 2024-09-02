@@ -147,6 +147,8 @@ public final class Constants {
 
   public static final class RIO_Channels_CAN_MOTOR {
     public static final int LauncherMotor = 34;
+    public static final int LauncherFollower = 31;
     public static final int FeederMotor = 36;
+    public static final int FeederFollower = 32;
   }
 }
