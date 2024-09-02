@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.6579998614542684,
+      "y": 6.726025815687995
+    },
+    "rotation": -121.37300514010848
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,27 +18,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Pickup middle near"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCmd"
+            "waitTime": 7.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Return to speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCmd"
+            "pathName": "AmpMove"
           }
         }
       ]
