@@ -126,6 +126,7 @@ public class DriveSubsystem extends SubsystemBase {
         0.4,
         new ReplanningConfig()
       ), 
+      
       () -> {
         // Boolean supplier that controls when the path will be mirrored for the red alliance
         // This will flip the path being followed to the red side of the field.
@@ -136,6 +137,7 @@ public class DriveSubsystem extends SubsystemBase {
             return alliance.get() == DriverStation.Alliance.Red;
         }
         return false;
+        //return true;
       }, 
       this
     );
@@ -293,8 +295,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds cs) {
-    // drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, botRelative);
-    drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false);
+    drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, false);
+    //drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond, botRelative);
+    //drive(-cs.vyMetersPerSecond, cs.vxMetersPerSecond, cs.omegaRadiansPerSecond, false);
   }
 
   /**
@@ -323,6 +326,11 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.setYaw(0.0);
+  }
+
+  public void flipHeading(){
+    m_gyro.setYaw(180.0);
+
   }
 
   public Rotation2d getYaw() {

@@ -28,6 +28,12 @@
           "data": {
             "pathName": "SourceMove"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FlipHeading"
+          }
         }
       ]
     }

@@ -28,6 +28,12 @@
           "data": {
             "pathName": "AmpMove"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FlipHeading"
+          }
         }
       ]
     }

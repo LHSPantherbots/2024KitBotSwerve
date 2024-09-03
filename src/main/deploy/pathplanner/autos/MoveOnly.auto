@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5180686725009814,
-      "y": 2.16
+      "x": 0.4721592269660398,
+      "y": 2.951822146935887
     },
-    "rotation": 180.0
+    "rotation": -179.47505918094296
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move"
+            "pathName": "RollOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FlipHeading"
           }
         }
       ]

@@ -57,6 +57,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("ShootCmd", new ShootCmd(launcher));
         NamedCommands.registerCommand("IntakeCmd", new IntakeCmd(launcher));
+        NamedCommands.registerCommand("FlipHeading", new FlipHeading(driveTrain));
 
         autoChoice = AutoBuilder.buildAutoChooser();
 
