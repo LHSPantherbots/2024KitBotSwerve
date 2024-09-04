@@ -12,10 +12,12 @@ import frc.robot.commands.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.RobotStateSubsystem;
@@ -23,6 +25,7 @@ import frc.robot.subsystems.LimeLightNoteDect;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -41,10 +44,12 @@ public class RobotContainer {
     // public static final LimeLight limelight = new LimeLight();
     public static final DriveSubsystem driveTrain = new DriveSubsystem();
     public static final Launcher launcher = new Launcher();
-    public static final LimeLightNoteDect limelight = new LimeLightNoteDect();
+    //public static final LimeLightNoteDect limelight = new LimeLightNoteDect();
+    public static final Climb climb = new Climb();
 
     // The driver's controller
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
    // public static SendableChooser<Command> autoChoice = new SendableChooser<>();
@@ -81,6 +86,7 @@ public class RobotContainer {
                                         * DriveConstants.kMaxSpeedMetersPerSecond
                                 ),
                         driveTrain));
+        climb.setDefaultCommand(new RunCommand(() -> climb.manualLeftArm(0.0), climb));
 
     }
 
@@ -96,10 +102,12 @@ public class RobotContainer {
 
         // DRIVER CONTROLS
 
-        new JoystickButton(m_driverController, GamePadButtons.Start)
-                .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
-        new JoystickButton(m_driverController, GamePadButtons.Select)
-                .whileTrue(new InstantCommand(driveTrain::restOdomWithCamData));
+        m_driverController.start().onTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
+        //new JoystickButton(m_driverController, GamePadButtons.Start)
+        //        .whileTrue(new InstantCommand(driveTrain::resetAll, driveTrain));
+        m_driverController.back().onTrue(new InstantCommand(driveTrain::restOdomWithCamData));
+        //new JoystickButton(m_driverController, GamePadButtons.Select)
+        //        .whileTrue(new InstantCommand(driveTrain::restOdomWithCamData));
         // While the left bumper is held down, the robot's speed will be set to a tenth
         // of its standard
         // value,
@@ -130,28 +138,44 @@ public class RobotContainer {
 
         // Operator Controls
 
-        new JoystickButton(operatorController, GamePadButtons.B)
+        new JoystickButton(operatorController, GamePadButtons.A)
                 .whileTrue(new RunCommand(launcher::intake, launcher))
                 .onFalse(new InstantCommand(launcher::newResume, launcher));
         // new JoystickButton(operatorController, GamePadButtons.B)
         // .onTrue(new InstantCommand(launcher::newIntake, launcher))
         // .onFalse(new InstantCommand(launcher::newResume, launcher));
 
-        new JoystickButton(m_driverController, GamePadButtons.LB)
-                .whileTrue(new InstantCommand(driveTrain::setRelitive, driveTrain));     
+        //new JoystickButton(m_driverController, GamePadButtons.LB)
+        //        .whileTrue(new InstantCommand(driveTrain::setRelitive, driveTrain));     
 
         new JoystickButton(operatorController, GamePadButtons.X)
                 .whileTrue(new InstantCommand(launcher::StopAll, launcher));
 
-        new JoystickButton(operatorController, GamePadButtons.A)
+
+
+        new JoystickButton(operatorController, GamePadButtons.B)
+                .onTrue(new RunCommand(()-> launcher.setLauncher(1.0), launcher));
+                //.whileTrue(new RunCommand(launcher::feed, launcher))
+                //.onFalse(new InstantCommand(() -> launcher.setFeed(0)));
+
+        new JoystickButton(operatorController, GamePadButtons.RB)
                 .whileTrue(new RunCommand(launcher::feed, launcher))
                 .onFalse(new InstantCommand(() -> launcher.setFeed(0)));
+
+                
+        
 
         new POVButton(operatorController, GamePadButtons.Up)
                 .onTrue(new InstantCommand(launcher::launcherRpmUp, launcher));
 
         new POVButton(operatorController, GamePadButtons.Down)
                 .onTrue(new InstantCommand(launcher::launcherRpmDown, launcher));
+
+        
+        m_driverController.leftBumper().whileTrue(
+                        new RunCommand(
+                            () -> climb.manualLeftArm(-MathUtil.applyDeadband(m_driverController.getRightY(), 0.1)),
+                            climb));
 
         // new POVButton(operatorController, GamePadButtons.Left)
         // .onTrue(new InstantCommand(launcher::launcherStop, launcher));
